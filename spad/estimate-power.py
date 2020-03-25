@@ -13,7 +13,10 @@ import numpy as np
 from pint import Quantity as Q_
 from conversions import *
 
-power_at_sample = Q_('20 uW')
+power_at_sample = Q_('138 uW')
+wavelength = 650 # nm
+
+print("Power at sample: {:e} --> {:e} cps".format(power_at_sample.to_compact(), power_to_cps(power_at_sample.to('watt').magnitude, wavelength).to('Hz').magnitude))
 
 nd_input = 0.320
 nd_output = np.array([3.30E-02,
@@ -32,7 +35,6 @@ nd_filter= {
     "NE30A-A": nd_output[5]/nd_input
     }
 
-wavelength = 650 # nm
 
 attenuated_power = power_at_sample * nd_filter["NE50A-A"] * nd_filter["NE30A-A"] * nd_filter["NE10A-A"]
 
