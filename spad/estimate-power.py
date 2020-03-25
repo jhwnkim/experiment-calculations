@@ -4,7 +4,8 @@ Created on Tue Mar 24 23:04:24 2020
 
 @author: Jaehwan Kim
 
-Script to estimate power on sample based on Alexandra's ND filter and system optical throughput data'
+Script to estimate power on sample based on Alexandra's ND filter and system optical throughput data.
+Given a measured count rate from the SPAD it will also output a PDP
 """
 
 
@@ -31,8 +32,13 @@ nd_filter= {
     "NE30A-A": nd_output[5]/nd_input
     }
 
-wavelength =650
+wavelength = 650 # nm
 
 attenuated_power = power_at_sample * nd_filter["NE50A-A"] * nd_filter["NE30A-A"] * nd_filter["NE10A-A"]
 
-print("Attenuated power: {:e} --> {:e} cps".format(attenuated_power.to_compact(), power_to_cps(attenuated_power.to('watt').magnitude, wavelength).to('Hz').magnitude))
+incident_cps = power_to_cps(attenuated_power.to('watt').magnitude, wavelength).to('Hz')
+print("Attenuated power: {:e} --> {:e} cps".format(attenuated_power.to_compact(), incident_cps.magnitude) )
+
+measured_cps = 5000 # cps
+
+print('PDP is {} %'.format(100.0*measured_cps/incident_cps.magnitude))
