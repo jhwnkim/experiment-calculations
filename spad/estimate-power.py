@@ -35,8 +35,19 @@ nd_filter= {
     "NE30A-A": nd_output[5]/nd_input
     }
 
+"""
+Kramnik's configuration
+NE10A + NE50A
+NE20A + NE20A (NE30A+NE10A)
+"""
 
-attenuated_power = power_at_sample * nd_filter["NE50A-A"] * nd_filter["NE30A-A"] * nd_filter["NE10A-A"]
+attenuated_power = power_at_sample * nd_filter["NE50A-A"] * nd_filter["NE30A-A"] * nd_filter["NE10A-A"] * nd_filter["NE10A"]
+"""
+Our candidate configurations:
+    0. NE50A-A + NE30A-A + NE10A-A
+    1. NE50A-A + NE30A-A + NE10A-A + NE20A --> 23.3 kcps
+    2. NE50A-A + NE30A-A + NE10A-A + NE10A --> 213 kcps
+"""
 
 incident_cps = power_to_cps(attenuated_power.to('watt').magnitude, wavelength).to('Hz')
 print("Attenuated power: {:e} --> {:e} cps".format(attenuated_power.to_compact(), incident_cps.magnitude) )
